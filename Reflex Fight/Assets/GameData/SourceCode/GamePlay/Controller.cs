@@ -13,6 +13,10 @@ public class Controller : MonoBehaviour {
     NavMeshAgent agent { get { return GetComponent<NavMeshAgent>(); } set { value = GetComponent<NavMeshAgent>(); } }
     public GameObject pointerEffect;
     Transform pointer;
+    [HideInInspector]
+    public bool nonClick;
+    int skill = -1;
+
     void Start () {
         mainCamera = Camera.main;
         agent.speed = speed;
@@ -20,11 +24,40 @@ public class Controller : MonoBehaviour {
 	}
 	
 	void Update () {
-
-        if (Input.GetMouseButtonDown(0) && Physics.Raycast(mainCamera.ScreenPointToRay(Input.mousePosition), out hit))
+        agent.speed = speed;
+        if (!nonClick)
         {
-            pointer.position = hit.point;
-            agent.SetDestination(pointer.position);
+            if (Physics.Raycast(mainCamera.ScreenPointToRay(Input.mousePosition), out hit))
+            {
+                pointer.position = hit.point;
+                if (Input.GetMouseButtonDown(0))
+                    switch (skill)
+                    {
+                        case -1:
+                             agent.SetDestination(pointer.position);
+                            break;
+                        case 0:
+                            TeleportSkill();
+                            break;
+                    }
+            }
         }
 	}
+
+    public void SetSkill(int num)
+    {
+        switch(num)
+        {
+            case 0:
+                skill = 0;
+                break;
+        }
+    }
+
+    void TeleportSkill()
+    {
+        agent.SetDestination(pointer.position);
+        transform.position = new Vector3(pointer.position.x, transform.position.y, pointer.position.z);
+        skill = -1;
+    }
 }
