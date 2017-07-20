@@ -96,6 +96,7 @@ public class Controller : MonoBehaviour {
     public void TeleportSkill()
     {
         agent.enabled = false;
+        transform.LookAt(skills[skill].pos);
         if (transform.position != skills[skill].pos)
             transform.position = Vector3.MoveTowards(transform.position, skills[skill].pos, skills[skill].Param);
         else
