@@ -124,6 +124,10 @@
       <Project>{ABFE608B-30B8-4079-2682-C1831DAB126B}</Project>
       <Name>Reflex Fight</Name>
     </ProjectReference>
+    <ProjectReference Include="Reflex Fight.Plugins.csproj">
+      <Project>{C918811D-7879-F3E9-7FD5-7D8041482936}</Project>
+      <Name>Reflex Fight.Plugins</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\PostProcessing\Editor\Attributes\PostProcessingModelEditorAttribute.cs" />
@@ -160,6 +164,15 @@
     <Compile Include="Assets\PostProcessing\Editor\Utils\EditorResources.cs" />
     <Compile Include="Assets\PostProcessing\Editor\Utils\FxStyles.cs" />
     <Compile Include="Assets\PostProcessing\Editor\Utils\ReflectionUtils.cs" />
+    <Compile Include="Assets\VolumetricFog\Editor\FogVolumeExtensions.cs" />
+    <Compile Include="Assets\VolumetricFog\Editor\VolumetricFogAbout.cs" />
+    <Compile Include="Assets\VolumetricFog\Editor\VolumetricFogGaiaExtension.cs" />
+    <Compile Include="Assets\VolumetricFog\Editor\VolumetricFogInspector.cs" />
+    <Compile Include="Assets\VolumetricFog\Editor\VolumetricFogSInfo.cs" />
+    <Compile Include="Assets\VolumetricFog\Extra\DynamicFog\Editor\DynamicFogEditor.cs" />
+    <Compile Include="Assets\VolumetricFog\Extra\DynamicFog\Editor\DynamicFogGaiaExtension.cs" />
+    <Compile Include="Assets\VolumetricFog\Extra\DynamicFog\Editor\DynamicFogManagerEditor.cs" />
+    <Compile Include="Assets\VolumetricFog\Extra\DynamicFog\Editor\FogVolumeExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Hand Painted Texture Pack - Natural Surfaces 1.10\Readme.txt" />
@@ -216,6 +229,58 @@
     <None Include="Assets\Standard Assets\Effects\ToonShading\Shaders\ToonBasicOutline.shader" />
     <None Include="Assets\Standard Assets\Effects\ToonShading\Shaders\ToonLit.shader" />
     <None Include="Assets\Standard Assets\Effects\ToonShading\Shaders\ToonLitOutline.shader" />
+    <None Include="Assets\Standard Assets\Environment\Water (Basic)\Shaders\FXWaterBasic.shader" />
+    <None Include="Assets\Standard Assets\Environment\Water\Water\Shaders\FXWaterPro.shader" />
+    <None Include="Assets\Standard Assets\Environment\Water\Water4\Shaders\FXWater4Advanced.shader" />
+    <None Include="Assets\Standard Assets\Environment\Water\Water4\Shaders\FXWater4Simple.shader" />
+    <None Include="Assets\Standard Assets\Environment\Water\Water4\Shaders\WaterInclude.cginc" />
+    <None Include="Assets\StylizedWater\Changelog.txt" />
+    <None Include="Assets\StylizedWater\Shaders\StylizedWater_desktop.shader" />
+    <None Include="Assets\StylizedWater\Shaders\StylizedWater_desktop_tesselation.shader" />
+    <None Include="Assets\StylizedWater\Shaders\StylizedWater_mobile_advanced.shader" />
+    <None Include="Assets\StylizedWater\Shaders\StylizedWater_mobile_basic.shader" />
+    <None Include="Assets\VolumetricFog\Demos\How to install demo scenes.txt" />
+    <None Include="Assets\VolumetricFog\Extra\DynamicFog\Demos\How to install demo scenes.txt" />
+    <None Include="Assets\VolumetricFog\Extra\DynamicFog\README.txt" />
+    <None Include="Assets\VolumetricFog\Extra\DynamicFog\Resources\Shaders\DFGBasic.shader" />
+    <None Include="Assets\VolumetricFog\Extra\DynamicFog\Resources\Shaders\DFGDesktop.shader" />
+    <None Include="Assets\VolumetricFog\Extra\DynamicFog\Resources\Shaders\DFGDesktopPlus.shader" />
+    <None Include="Assets\VolumetricFog\Extra\DynamicFog\Resources\Shaders\DFGOnlyFog.shader" />
+    <None Include="Assets\VolumetricFog\Extra\DynamicFog\Resources\Shaders\DFGSimple.shader" />
+    <None Include="Assets\VolumetricFog\Extra\DynamicFog\Resources\Shaders\DFGWithSky.shader" />
+    <None Include="Assets\VolumetricFog\Extra\DynamicFog\Resources\Shaders\DFMLambert.shader" />
+    <None Include="Assets\VolumetricFog\Extra\DynamicFog\Resources\Shaders\DFMLambertSolidColor.shader" />
+    <None Include="Assets\VolumetricFog\Extra\DynamicFog\Resources\Shaders\DFMStandardShader.shader" />
+    <None Include="Assets\VolumetricFog\Extra\DynamicFog\Resources\Shaders\DFMStandardShaderSolid.shader" />
+    <None Include="Assets\VolumetricFog\Extra\DynamicFog\Resources\Shaders\DFMSurfaceShaderCommon.cginc" />
+    <None Include="Assets\VolumetricFog\Extra\DynamicFog\Resources\Shaders\DFMUnlit.shader" />
+    <None Include="Assets\VolumetricFog\Extra\DynamicFog\Resources\Shaders\DFMUnlitSolidColor.shader" />
+    <None Include="Assets\VolumetricFog\Extra\DynamicFog\Resources\Shaders\DFMVertexFragmentShaderCommon.cginc" />
+    <None Include="Assets\VolumetricFog\Extra\DynamicFog\Resources\Shaders\DFOBasic.shader" />
+    <None Include="Assets\VolumetricFog\Extra\DynamicFog\Resources\Shaders\DFODesktop.shader" />
+    <None Include="Assets\VolumetricFog\Extra\DynamicFog\Resources\Shaders\DFODesktopPlus.shader" />
+    <None Include="Assets\VolumetricFog\Extra\DynamicFog\Resources\Shaders\DFOOnlyFog.shader" />
+    <None Include="Assets\VolumetricFog\Extra\DynamicFog\Resources\Shaders\DFOSimple.shader" />
+    <None Include="Assets\VolumetricFog\Extra\DynamicFog\Resources\Shaders\DFOWithSky.shader" />
+    <None Include="Assets\VolumetricFog\Extra\DynamicFog\Resources\Shaders\DFRLambert.shader" />
+    <None Include="Assets\VolumetricFog\Extra\DynamicFog\Resources\Shaders\DFRLambertSolidColor.shader" />
+    <None Include="Assets\VolumetricFog\Extra\DynamicFog\Resources\Shaders\DFRStandardShader.shader" />
+    <None Include="Assets\VolumetricFog\Extra\DynamicFog\Resources\Shaders\DFRStandardShaderSolid.shader" />
+    <None Include="Assets\VolumetricFog\Extra\DynamicFog\Resources\Shaders\DFRUnlit.shader" />
+    <None Include="Assets\VolumetricFog\Extra\DynamicFog\Resources\Shaders\DFRUnlitSolidColor.shader" />
+    <None Include="Assets\VolumetricFog\Extra\DynamicFog\Resources\Shaders\DynamicFogCommon.cginc" />
+    <None Include="Assets\VolumetricFog\Extra\DynamicFog\Resources\Shaders\FogOfWar.shader" />
+    <None Include="Assets\VolumetricFog\README.txt" />
+    <None Include="Assets\VolumetricFog\Resources\Extra\Sprites\Shaders\SpriteFogCommon.cginc" />
+    <None Include="Assets\VolumetricFog\Resources\Extra\Sprites\Shaders\SpriteFogDiffuse.shader" />
+    <None Include="Assets\VolumetricFog\Resources\Extra\Sprites\Shaders\SpriteFogUnlit.shader" />
+    <None Include="Assets\VolumetricFog\Resources\Shaders\Blur.shader" />
+    <None Include="Assets\VolumetricFog\Resources\Shaders\ChaosLerp.shader" />
+    <None Include="Assets\VolumetricFog\Resources\Shaders\CopyDepth.shader" />
+    <None Include="Assets\VolumetricFog\Resources\Shaders\CopySunDepth.shader" />
+    <None Include="Assets\VolumetricFog\Resources\Shaders\VolumetricFog.cginc" />
+    <None Include="Assets\VolumetricFog\Resources\Shaders\VolumetricFog.shader" />
+    <None Include="Assets\VolumetricFog\Resources\Shaders\VolumetricFogOptions.cginc" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="GenerateTargetFrameworkMonikerAttribute" />
