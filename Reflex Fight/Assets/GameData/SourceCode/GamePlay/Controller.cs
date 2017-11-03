@@ -3,78 +3,89 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 using System;
+using Profiles;
 
-[RequireComponent(typeof(NavMeshAgent))]
-public class Controller : MonoBehaviour {
-
+[RequireComponent(typeof(CharacterController))]
+public class Controller : MonoBehaviour
+{
     public enum typeOfSkill
     {
         directed, non_directed, directed_on_target
     }
 
-    [Serializable]
-    public struct Skill
+    #region Params
+    public CharacterController controller { get { return GetComponent<CharacterController>(); } set { value = GetComponent<CharacterController>(); } }
+    public Animator animator;
+    public TheCamera mainCamera;
+    public GameplayUI GameplayUI;
+    public Transform pointer;
+
+    public List<Skill> skills;
+
+    public float stopAnimDistance, speed, rotationSpeed, gravity;
+    //for animations
+    public float SmoothRotation;
+
+    #endregion
+
+    #region Varablies
+    private RaycastHit hit;
+    private Vector3 direction;
+    private float dir_anim;
+
+    [HideInInspector]
+    public bool nonClick, usedTeleport, stop, actioned;
+
+    [HideInInspector]
+    public int skill = 0, animNum;
+    #endregion
+
+    #region Customisation window
+    #if UNITY_EDITOR
+    public int gridNum;
+    public Transform Canvas;
+    public GameObject skillExamplePrefab;
+    public Color skillsColor, skillsCooldownColor, skillsCooldownTextColor;
+    public Font skillsFont;
+    public int fontSize, skilltype;
+    public Texture2D textIco, paramIco, cooldownIco;
+    public ControllerProfile profile;
+
+    public bool setControllerHide;
+    #endif
+    #endregion
+
+    #region Constnats 
+    const float maxAngle = 50f;
+    const float minAxis = 0.14f;
+    #endregion
+
+    void Start()
     {
-        public typeOfSkill TypeOfSkill;
-        public string SkillName, Discription;
-        public float Range, UseTime, Cooldown, Param;
-        bool onCooldown;
-        [HideInInspector]
-        public Vector3 pos;
+        mainCamera = FindObjectOfType<TheCamera>();
+        GameplayUI = FindObjectOfType<GameplayUI>();
     }
 
-    public Animator animator;
-    public GameObject test;
-    public float stopAnimDistance;
-    Camera mainCamera;
-    RaycastHit hit;
-    NavMeshAgent agent { get { return GetComponent<NavMeshAgent>(); } set { value = GetComponent<NavMeshAgent>(); } }
-    public GameObject pointerEffect;
-    Transform pointer;
-    [HideInInspector]
-    public bool nonClick, nonClickByCam, usedTeleport;
-    int skill = -1, animNum;
-    float speed;
-    public Skill[] skills;
-
-    void Start () {
-        mainCamera = Camera.main;
-        pointer = Instantiate(pointerEffect, Vector3.zero, Quaternion.identity).transform;
-        speed = agent.speed;
-	}
-	
-	void Update () {
-
-        if (!nonClick && !nonClickByCam)
+    void Update()
+    {
+        float max = Mathf.Abs(Mathf.Sqrt(Mathf.Pow(GameplayUI.InputVector.x, 2) + Mathf.Pow(GameplayUI.InputVector.z, 2)));
+        controller.Move(-Vector3.up * gravity * Time.deltaTime);
+        if (max > minAxis)
         {
-            if (Physics.Raycast(mainCamera.ScreenPointToRay(Input.mousePosition), out hit))
+            controller.Move(transform.forward * max * speed * Time.deltaTime);
+            if (GameplayUI.dragged)
             {
-                pointer.position = hit.point;
-                if (Input.GetMouseButtonUp(0))
-                {
-                    switch (skill)
-                    {
-                        case -1:
-                            animator.CrossFade("Move", 0.1f);
-                            agent.SetDestination(pointer.position);
-                            break;
-                        case 0:
-                            Vector3 target;
-                            if (Vector3.Distance(transform.position, pointer.position) > skills[skill].Range)
-                                target = transform.position + (pointer.position - transform.position).normalized * skills[skill].Range;
-                            else
-                                target = pointer.position;
-                            skills[skill].pos = target + new Vector3(0, agent.height/2, 0);
-                            agent.SetDestination(skills[skill].pos);
-                            usedTeleport = true;
-                            break;
-                    }
-                }
+                float angle = (float)(Math.Atan2(GameplayUI.InputVector.x, GameplayUI.InputVector.z) / Math.PI * 180);
+                transform.eulerAngles = new Vector3(transform.localEulerAngles.x, Mathf.LerpAngle(transform.localEulerAngles.y, angle, rotationSpeed * Time.deltaTime), transform.localEulerAngles.x);
+                dir_anim = Mathf.Lerp(dir_anim, GetNormalizedAngle(Mathf.DeltaAngle(transform.localEulerAngles.y, angle), maxAngle), SmoothRotation * Time.deltaTime);
             }
-        }
-        Animatate();
-        if (usedTeleport)
-            TeleportSkill();
+            else dir_anim = Mathf.Lerp(dir_anim, 0, SmoothRotation * Time.deltaTime);
+            animator.SetFloat("Speed", max);
+            animator.SetFloat("Direction", dir_anim);
+        } else animator.SetFloat("Speed", 0);
+
+        if (Input.GetMouseButtonDown(1))
+            animator.CrossFade("Sword Attack Turn Right", 0.2f, 1);
     }
 
     public void SetSkill(int num)
@@ -82,29 +93,29 @@ public class Controller : MonoBehaviour {
         skill = num;
     }
 
-    void Animatate()
+    public float GetNormalizedAngle(float value, float max)
     {
-        if(test)
-            test.transform.position = agent.pathEndPosition;
-        if (Vector2.Distance(new Vector2(transform.position.x, transform.position.z), new Vector2(agent.pathEndPosition.x, agent.pathEndPosition.z)) <= stopAnimDistance)
-            animNum = 0;
-        else
-            animNum = 1;
-        animator.SetInteger("Num", animNum);
-    }
-
-    public void TeleportSkill()
-    {
-        agent.enabled = false;
-        transform.LookAt(skills[skill].pos);
-        if (transform.position != skills[skill].pos)
-            transform.position = Vector3.MoveTowards(transform.position, skills[skill].pos, skills[skill].Param);
-        else
-        {
-            skill = -1;
-            agent.enabled = true;
-            usedTeleport = false;
-        }
+        return Math.Abs(value) > max ? Math.Sign(value) : (value / (max / 100)) / 100;
     }
 }
- 
+
+
+[Serializable]
+public class Skill 
+{
+    public Sprite icon;
+    public Controller.typeOfSkill TypeOfSkill;
+    public string SkillName, Discription;
+    public float Range, UseTime, Cooldown, Param;
+    bool onCooldown;
+    public Vector3 pos;
+    public string InvokedVoid;
+
+    public Skill(string name)
+    {
+        icon = null;
+        TypeOfSkill = Controller.typeOfSkill.directed;
+        SkillName = name;
+    }
+
+}
